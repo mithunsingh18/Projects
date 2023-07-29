@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    @import url('https://fonts.googleapis.com/css?family=Muli&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #3b3b98;
+  color: #fff;
+  font-family: 'Muli', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  overflow: hidden;
+  padding: 10px;
+  margin: 0;
+}
+
+h2 {
+  margin: 10px 0 20px;
+  text-align: center;
+}
+
+.container {
+  background-color: #23235b;
+  box-shadow: 0px 2px 10px rgba(255, 255, 255, 0.2);
+  padding: 20px;
+  width: 350px;
+  max-width: 100%;
+}
+
+.result-container {
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  position: relative;
+  font-size: 18px;
+  letter-spacing: 1px;
+  padding: 12px 10px;
+  height: 50px;
+  width: 100%;
+}
+
+.result-container #result {
+  word-wrap: break-word;
+  max-width: calc(100% - 40px);
+  overflow-y: scroll;
+  height: 100%;
+}
+
+#result::-webkit-scrollbar {
+  width: 1rem;
+}
+
+.result-container .btn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+}
+
+.btn {
+  border: none;
+  background-color: #3b3b98;
+  color: #fff;
+  font-size: 16px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.btn-large {
+  display: block;
+  width: 100%;
+}
+
+.setting {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 15px 0;
+}
+</style>
+<body>
+    <div class="container">
+        <h2>Password Generator</h2>
+        <div class="result-container">
+          <span id="result"></span>
+          <button class="btn" id="clipboard">
+            <i class="far fa-clipboard"></i>
+          </button>
+        </div>
+        <div class="settings">
+          <div class="setting">
+            <label>Password Length</label>
+            <input type="number" id="length" min="4" max="20" value="20">
+          </div>
+          <div class="setting">
+            <label>Include uppercase letters</label>
+            <input type="checkbox" id="uppercase" checked>
+          </div>
+          <div class="setting">
+            <label>Include lowercase letters</label>
+            <input type="checkbox" id="lowercase" checked>
+          </div>
+          <div class="setting">
+            <label>Include numbers</label>
+            <input type="checkbox" id="numbers" checked>
+          </div>
+          <div class="setting">
+            <label>Include symbols</label>
+            <input type="checkbox" id="symbols" checked>
+          </div>
+        </div>
+  
+        <button class="btn btn-large" id="generate">
+          Generate Password
+        </button>
+      </div>
+    <script>
+        const resultE1 = document.getElementById('result')
+        const lengthE1 = document.getElementById('length')
+        const uppercaseE1 = document.getElementById('uppercaseE1')
+        const lowercaseE1 = document.getElementById('lowercaseE1')
+        const numberE1 = document.getElementById('number')
+        const symbolE1 = document.getElementById('symbol')
+        const generateE1 = document.getElementById('generate')
+        const clipboardE1 = document.getElementById('clipboard')
+
+        const randomFunc = {
+            lower: getrandomlower,
+            upper:getrandomupper,
+            number: getrandomnumber,
+            symbol: getrandomsymbol
+        }
+        ClipboardE1.addEventListener('click', () =>{
+            const password = resultE1.innerText;
+            if(!password){
+                return;
+            }
+            navigator.clipboard.writeText(password);
+            alert('Password copied to clipboard!')
+        })
+
+        generateE1.addEventListener('click', () =>{
+            const length = +lenthE1.value
+            const hasUpper = uppercaseE1.checked
+            const hasLower = lowercaseE1.checked
+            const hasNumber = numbersE1.checked
+            const hasSymbol = symbolsE1.cheked
+
+            resultE1.innerText = generatepassword(hasLower,hasUpper,hasNumber,hasSymbol,length)
+        })
+
+        function generatepassword(lower,upper,number,symbol,length){
+            let generatepassword = ''
+            const typesCount = lower + upper + number + symbol
+            const typesArr = [{lower},{upper},{number},{symbol}].filter(item => Object.values(item)[0])
+
+            if(typesCount === 0){
+                return ''
+            }
+            for(let i = 0; i < length; i += typesCount) {
+             typesArr.forEach(type => {
+            const funcName = Object.keys(type)[0]
+            generatedPassword += randomFunc[funcName]()
+        })
+    }
+           const finalPassword = generatedPassword.slice(0, length)
+
+           return finalPassword
+        }
+        function getrandomlower(){
+            return string.fromcharcode(Math.floor(Math.random() *26) + 97)
+        }
+        function getrandomupper(){
+            return string.fromcharcode(Math.floor(Math.random() *26) + 97)
+        }
+        function getrandomnumber(){
+            return string.fromcharcode(Math.floor(Math.random() *26) + 97)
+        }
+        function getrandomsymbol(){
+            const symbols = '!@#$%^&*(){}[]=<>/,.'
+            return symbols[Math.floor(Math.random() * symbols.length)]
+        }
+    </script>
+</body>
+</html>
